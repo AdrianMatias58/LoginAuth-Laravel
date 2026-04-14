@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -21,11 +22,19 @@ class UserController extends Controller
         Auth::login($user);
         return redirect();
     }
-    public function LoginUser(){
+    public function LoginUser(Request $req){
+        if (Auth::attempt($req)) {
+            $req->session()->regenerate();
 
+            return redirect('/');
+        }
     }
 
-    public function LogOutUser(){
+    public function LogOutUser(Request $req){
+        Auth::logout();
+        $req->session()->invalidate();
+        $req->session()->regenerateToken();
+        return redirect('/');
 
     }
 
