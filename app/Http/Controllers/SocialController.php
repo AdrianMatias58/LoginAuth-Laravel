@@ -13,7 +13,7 @@ class SocialController extends Controller
         return Socialite::driver('google')->redirect();
     }
     public function CallBackGoogle(){
-        $usuario_google=Socialite::driver('google')->user();
+        $usuario_google=Socialite::driver('google')->stateless()->user();
         $User = User::updateOrCreate([
             'google_id'=>$usuario_google->id
         ],[
